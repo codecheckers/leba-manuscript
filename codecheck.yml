@@ -38,9 +38,9 @@ codechecker:
     ORCID: 0000-0001-8607-8025
 
 summary: >
-  Rmarkdown document provided;  biggest concerns found with linux
+  Comprehensive reproduction of Rmarkdown document;  biggest concerns found with linux
   versions of R package "gt".
-repository: https://github.com/leba-instrument/leba-manuscript
+repository: https://github.com/codecheckers/leba-manuscript
 check_time: "2023-11-26 21:00:00"
 certificate: 2023-012
-report: https://doi.org/10.5281/zenodo.FIXME
+report: https://doi.org/10.5281/zenodo.10213244
