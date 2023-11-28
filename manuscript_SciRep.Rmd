@@ -164,7 +164,7 @@ mask              : no
 draft             : no
 
 
-documentclass     : "apa6"
+documentclass     : "article" #sje: was apa6 - missing on my machine
 classoption       : "man"
 output            : 
   papaja::apa6_pdf:
@@ -702,8 +702,8 @@ cols_label(
     table.font.size=px(14L)) %>% 
   cols_width(
     Stem ~ px(200)) %>% 
- gtsave("Figures/Figure2.png", vwidth=6000)
-
+ ##gtsave("Figures/Figure2.png", vwidth=6000)
+   gtsave('Figures/Figure2.html') #sje
 
 
 full.tab.2 %>% 
@@ -779,18 +779,19 @@ cols_label(
   ) %>% tab_options(
     table.font.size=px(14L)) %>% 
   cols_width(
-    Stem ~ px(200)) %>% 
-gtsave("Figures/Figure3.png",vwidth=6000)
+    Stem ~ px(200)) %>%
+  gtsave('Figures/Figure3.html') #sje
+  #gtsave("Figures/Figure3.png",vwidth=6000)
 
 ```
 
 ```{r efagtPic1, echo=FALSE,  fig.cap= 'Summary descriptives and response pattern observed in the large-scale survey for item 01-24. All items violated normality assumption.', out.height='100%', out.width='250%'}
-knitr::include_graphics('Figures/Figure2.png')
+knitr::include_graphics('Figures/orig-Figure2.png') #sje
 
 ```
 
 ```{r efagtPic2, echo=FALSE,  fig.cap= 'Summary descriptives and response pattern observed in the large-scale survey for item 25-48. All items violated normality assumption.', out.height='100%', out.width='250%'}
-knitr::include_graphics('Figures/Figure3.png')
+knitr::include_graphics('Figures/orig-Figure3.png') #sje
 
 ```
 
@@ -991,8 +992,8 @@ cols_label(
     palette="ggthemes::fivethirtyeight") %>% 
   tab_options(
     table.font.size=px(14L)) %>% 
-  
-  gtsave("Figures/S1_Fig.png", vwidth=6000)
+  gtsave("Figures/S1_Fig.html")
+  ##gtsave("Figures/S1_Fig.png", vwidth=6000)
   
 # tab_row_group(
   #     label=md("**F5: Using light in the morning and during daytime**"),
@@ -1614,7 +1615,8 @@ gt_plt_dot(
       label=md("**F1: Wearing blue light filters**"),
       rows=c(10,11,18) 
         ) %>% 
-  gtsave("Figures/S2_Fig.png",vwidth=7000)
+  ##gtsave("Figures/S2_Fig.png",vwidth=7000)
+  gtsave("Figures/S2_Fig.html") #SJE
 
 ```
 
