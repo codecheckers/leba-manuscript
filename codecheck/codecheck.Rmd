@@ -1,0 +1,219 @@
+---
+output:
+  pdf_document:
+    toc: false
+    includes:
+       in_header: codecheck-preamble.sty
+    latex_engine: xelatex
+---
+
+```{r rsetup,eval=TRUE,include=FALSE}
+require("codecheck")
+require("knitr")
+require("rprojroot")
+require("yaml")
+require("xtable")
+require("tibble")
+require("readr")
+options(width = 60)
+opts_chunk$set(cache=FALSE)
+
+root = find_root("codecheck.yml")
+```
+
+```{r codecheck_logo, echo=FALSE,results='asis'}
+latex_codecheck_logo()
+```
+
+```{r manifest, eval=TRUE, include=FALSE}
+metadata = codecheck_metadata(root)
+manifest = metadata$manifest
+
+dest_dir = file.path(root, "codecheck", "outputs")
+## Create the outputs directory if missing
+if ( !dir.exists(dest_dir) ) {
+  dir.create(dest_dir)
+}
+
+manifest_df = copy_manifest_files(root, metadata,
+                                  dest_dir, keep_full_path = FALSE,
+                                  overwrite = FALSE)
+```
+
+---
+title: `r paste("CODECHECK certificate", metadata$certificate)`
+subtitle: `r codecheck:::as_latex_url(metadata$report)`
+---
+
+```{r summary_metadata, echo=FALSE, results='asis'}
+latex_summary_of_metadata(metadata)
+```
+
+```{r summary_manifest, echo=FALSE, results='asis'}
+latex_summary_of_manifest(metadata, manifest_df, root)
+```
+
+# Summary
+
+Scientifically, this was a straightforward project to reproduce.  The
+authors had provided a github repository containing their Rmarkdown
+file to generate the paper, along with all data required.  The authors
+had also clearly enumerated which R packages were required.
+
+The only significant problem was that one of the CRAN R packages (gt)
+used was troublesome to work correctly on Ubuntu 23.10, which
+required significant workarounds as described below.
+
+\clearpage
+
+# CODECHECKER notes
+
+
+Using a recent install of Ubuntu 23.10 on a 2018 laptop, I needed to include some extra
+system packages to start the codecheck process.
+
+    sudo apt install libsodium-dev
+    sudo apt install librdf0-dev
+    sudo apt install librsvg2-dev  # for rsvg package
+    sudo apt install libmagick++-dev  # magick package
+    sudo apt install chromium-browser # for gt
+    sudo apt install texlive-xetex  ## needed for xelatex
+
+
+then we could proceed, installing codecheck
+
+    install_github('codecheckers/codecheck')
+
+    require(codecheck)
+    create_codecheck_files()
+
+
+First, I needed to install the packages as outlined in their file
+`install_packages.R`.  This took about an hour to complete on my
+laptop.
+
+Although all packages installed, once compiling the Rmarkdown, I hit
+two problems with the gt package.  First, it only seemed to work
+within Rstudio, rather than in Emacs terminal.  Second, the gt package
+was unable to convert html output to png.  This has been documented
+online as a problem, and remains an open issue: <https://github.com/rstudio/gt/issues/1029>
+
+
+
+Figure 1 is a drawio file, not computed, but generated from the
+website <https://drawio.com> using the file `LEBA_figure1.drawio` provided
+in the Figures folder.  When I loaded this .drawio file into the web,
+it generated Figure1.png.  I could not find the source for Figure 5.
+Otherwise, all figures were reproduced, although I needed to edit the
+Rmarkdown file to save tables as html, rather than png, using:
+
+     ##gtsave("Figures/Figure2.png", vwidth=6000)
+     gtsave('Figures/Figure2.html') #sje
+
+After the code had run, there were some issues generating the final
+pdf manuscript, namely the lack of apa6.cls and Arial font.
+
+The html tables generated were output were loaded into a browser and
+then screenshots of the tables were taken for inclusion here.
+
+## Notes
+
+1. None of the 'classic' tables were reproduced due to the issues with
+the latex document not compiling.
+
+## Recommendations
+
+
+* There is no .rproj file, unlike suggested in the readme; provide one
+  or delete reference to it.
+* LaTeX requirements (apa6.cls and Arial font) should be adjusted to
+  make them more portable.
+* There is not much that could be done about the problems with the gt
+  package; the authors report it working well on Mac.  However, this
+  could be documented.
+* I'd suggest removing the code chunk (that is not run by default) to
+  install packages, and instead ensure everytyhing is listed in  the
+  `install_packages.R` file.  (Some items were missing, that are
+  documented in my copy of the file.
+* Include a final code chunk in your Rmarkdown file that calls
+  `sessionInfo()` to list the R environment used to generate your
+  file.  You can see an example at the end of this document.
+* The main figure numbers in the filenames match that used in the
+  code; there is an 'off by one' error in the figure numbers used in
+  the manuscript versus the numbers in the files.  This could be
+  fixed in any future versions.
+
+\clearpage
+
+# Manifest files
+
+```{r, echo=FALSE, results="asis", width=100}
+for(i in c(1:nrow(manifest_df))) {
+  path <- manifest_df[i,"dest"]
+  if(stringr::str_ends(path, "(png|pdf|jpg|jpeg)")) {
+    # include graphics with knitr has to happen at top level in chunks, see https://github.com/yihui/knitr/issues/1260
+    # see also https://stackoverflow.com/questions/51268623/insert-images-using-knitrinclude-graphics-in-a-for-loop
+    # knitr::include_graphics(manifest_df[1, "dest"], error = TRUE)
+    # Therefore, generate Markdown code here:
+    cat("## ", basename(path), "\n\n")
+    cat("**Comment:** ", manifest_df[i,"comment"], "\n\n")
+    cat(paste0("![", "Test ", "](", path, ")\n"))
+  } else if (stringr::str_ends(path, "(Rout|txt)")) {
+    cat("## ", basename(path), "\n\n")
+    cat("\\scriptsize \n\n", "```txt\n")
+    cat(readLines(path), sep = "\n")
+    cat("\n\n``` \n\n", "\\normalsize \n\n")
+  } else if (stringr::str_ends(path, "csv")) {
+    cat("## ", basename(path), "\n\n", "Summary statistics of tabular data:", "\n\n")
+    cat("\\scriptsize \n\n", "```txt\n")
+    print(skimr::skim(read.csv(path)))
+    cat("\n\n``` \n\n", "\\normalsize \n\n")
+  } else {
+    cat("## ", basename(path), "\n\n")
+    cat("Cannot inlcude output file as figure.")
+  }
+  
+  cat("\\clearpage \n\n")
+}
+```
+
+\clearpage
+
+## Acknowledgements
+
+I would like to thank Dr Spitschan and his team for promptly answering
+any queries I had with this reproduction.  CODECHECK is financially
+supported by the Mozilla foundation.
+
+# Citing this document
+
+```{r, results='asis',echo=FALSE}
+cite_certificate(metadata)
+```
+
+# About CODECHECK
+
+This certificate confirms that the codechecker could independently
+reproduce the results of a computational analysis given the data and
+code from a third party.  A CODECHECK does not check whether the
+original computation analysis is correct.  However, as all materials
+required for the reproduction are freely available by following the
+links in this document, the reader can then study for themselves the
+code and data.
+
+
+# About this document
+
+This document was created using [R Markdown](https://rmarkdown.rstudio.com/) using the [`codecheck`](https://github.com/codecheckers/codecheck) R package.
+`make codecheck.pdf` will regenerate the report file.
+
+```{r}
+sessionInfo()
+```
+
+```{r, include=FALSE, eval=FALSE}
+# render this document in RStudio
+rmarkdown::render("codecheck.Rmd", output_format = "pdf_document") 
+```
+<!-- https://doi.org/10.5281/zenodo.10213244 was given by system; so -->
+<!-- subtract 1 to guess permanent DOI -->
