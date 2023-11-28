@@ -22,7 +22,7 @@ manifest:
     comment: manuscript Figure 3
   - file: Figures/Figure4.png
     comment: manuscript Figure 4
-  - file: Figure6.png
+  - file: Figures/Figure6.png
     comment: manuscript Figure 6
   - file: Figures/S1_Fig-screenshot.png
     comment: manuscript Figure S1
