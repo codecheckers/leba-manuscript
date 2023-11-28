@@ -15,7 +15,7 @@ install.packages("kableExtra")
 
 #gt family
 remotes::install_github("jthomasmock/gtExtras")
-install.packages("gt")
+install.packages("gt")  ## installed by gtextras?
 #remotes::install_github("ddsjoberg/gtsummary")
 install.packages("gtsummary")
 
@@ -35,16 +35,16 @@ install.packages("kutils")
 install.packages("lavaan")
 install.packages("semPlot")
 install.packages("semTable")
-install.packages("semTools")
+install.packages("semTools")  ## installed by lavaan?
 install.packages("seminr")
 ## Correlation
 install.packages("ggcorrplot")
 
 ##Descriptives and EFA
-install.packages("psych")
-install.packages("dlookr")
-install.packages("qgraph")
-install.packages("tidyverse")
+install.packages("psych")  ## installed already?
+install.packages("dlookr") ## many deps
+install.packages("qgraph")  ## installed by semPlot?
+install.packages("tidyverse") ## had already.
 install.packages("paran")
 install.packages("EFA.MRFA")
 install.packages("VIM")#Missing data
@@ -52,10 +52,10 @@ install.packages("VIM")#Missing data
 
 
 #Ploting and diagram
-install.packages("DiagrammeR")
+install.packages("DiagrammeR")  ## installed laready
 #devtools::install_github('rich-iannone/DiagrammeR')
-install.packages("DiagrammeRsvg")
-install.packages("ggplot2")
+install.packages("DiagrammeRsvg") ## installed already
+install.packages("ggplot2")  ## already installed as part of tidyverse
 install.packages("cowplot")
 install.packages("rsvg")
 
@@ -64,6 +64,8 @@ install.packages("rsvg")
 devtools::install_github("crsh/citr")
 install.packages("questionr")
 devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)#Others
+## looks like this installs the korpus packages...
+
 install.packages("magick")
 devtools::install_github("paleolimbot/rbbt")
 #fonts
@@ -71,3 +73,25 @@ install.packages("extrafont")
 extrafont::fonttable()
 extrafont::loadfonts()
 extrafont:::fonttable_file()
+
+
+## SJE extra lines
+## These installations were not mentioned before.
+install.packages("tabledown")
+install.packages("ggsci")
+install.packages("ggtext")
+install.packages("latticeExtra")
+
+
+## Quitting from lines 627-785 [fullgt] (manuscript_SciRep.Rmd)
+## Error in gt_save_webshot(data = data, filename, path, ...) : 
+##   The package "webshot2" is required to save gt tables as images.
+
+install.packages("webshot2")
+## webshot2 does not require the following line.
+##webshot::install_phantomjs()  ## in the R code chunk
+
+## more that wwere missing from orig install
+install.packages("patchwork")
+install.packages("correlation")
+
