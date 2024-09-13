@@ -11,9 +11,7 @@ paper:
       ORCID: https://orcid.org/0000-0001-7972-563
     - name: Manuel Spitschan
       ORCID: https://orcid.org/0000-0002-8572-9268
-  reference: >
-    Scientific Reports, in press (DOI 10.1038/s41598-023-48241-y)
-    https://www.researchsquare.com/article/rs-2587424/v1
+  reference: https://www.researchsquare.com/article/rs-2587424/v1
 
 manifest:
   - file: Figures/Figure2-screenshot.png
