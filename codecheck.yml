@@ -6,11 +6,11 @@ paper:
     An inventory of human light exposure related behaviour
   authors:
     - name: Mushfiqul Anwar Siraji
-      ORCID: https://orcid.org/0000-0003-0127-9982
+      ORCID: 0000-0003-0127-9982
     - name: Rafael Lazar
-      ORCID: https://orcid.org/0000-0001-7972-563
+      ORCID: 0000-0001-7972-563
     - name: Manuel Spitschan
-      ORCID: https://orcid.org/0000-0002-8572-9268
+      ORCID: 0000-0002-8572-9268
   reference: https://doi.org/10.1038/s41598-023-48241-y
   # checked preprint: https://doi.org/10.21203/rs.3.rs-2587424/v1
 
